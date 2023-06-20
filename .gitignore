@@ -1,2 +1,3 @@
 venv/
 dana_table.xlsx
+db.sqlite3
