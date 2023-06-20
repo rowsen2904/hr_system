@@ -38,6 +38,7 @@ class Worker(models.Model):
     mail = models.EmailField(max_length=30, null=True, blank=True)
     gender = models.CharField(max_length=15, choices=Genders.choices)
     status = models.CharField(max_length=30, choices=Statuses.choices)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     photo = models.ImageField(
         upload_to='workers_photo/', null=True, blank=True)
@@ -66,3 +67,7 @@ class Worker(models.Model):
     @property
     def is_female(self):
         return self.gender == self.Genders.FEMALE
+
+    def set_as_deleted(self):
+        self.status = self.Statuses.DELETED
+        self.save()
