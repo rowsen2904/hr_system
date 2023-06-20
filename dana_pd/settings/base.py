@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # my apps
     "branch",
+    "worker",
     # 3rd party apps
     "rest_framework",
 ]
@@ -58,7 +59,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'dana_pd.wsgi.application'
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -76,6 +76,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 30
+}
 
 
 # Internationalization
