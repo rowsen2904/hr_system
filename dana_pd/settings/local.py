@@ -7,6 +7,10 @@ SECRET_KEY = 'django-insecure-yx6&zuhuwx(=pu_fo@t0qy#00)w5$c*uyezz9&)g06_v6^6505
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
+INTERNAL_IPS = [
+    "127.0.0.1"
+]
+
 INSTALLED_APPS += ["debug_toolbar"]
 
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
