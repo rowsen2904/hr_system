@@ -1,3 +1,6 @@
 venv/
 dana_table.xlsx
 db.sqlite3
+
+*__pycache__
+*migrations
