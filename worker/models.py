@@ -37,7 +37,7 @@ class Worker(models.Model):
     address = models.CharField(max_length=100)
     mail = models.EmailField(max_length=30, null=True, blank=True)
     gender = models.CharField(max_length=15, choices=Genders.choices)
-    status = models.CharField(max_length=30, choices=Statuses.choices)
+    status = models.CharField(max_length=30, choices=Statuses.choices, default=Statuses.ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     photo = models.ImageField(
