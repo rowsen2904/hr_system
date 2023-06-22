@@ -26,3 +26,8 @@ class BranchDetailDeleteView(APIView):
         branch = self.get_object(pk=pk)
         branch.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class DepartmentCreateView(generics.CreateAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer

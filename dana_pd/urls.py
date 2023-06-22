@@ -22,7 +22,8 @@ from dana_pd import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path("", include("worker.urls"))
+    path("", include("worker.urls")),
+    path("", include("branch.urls")),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

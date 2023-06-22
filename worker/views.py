@@ -13,17 +13,17 @@ class WorkerListView(generics.ListAPIView):
     queryset = Worker.objects.all()
     pagination_class = WorkerPagination
     serializer_class = WorkerListSerializer
-    
-    
+
+
 class WorkerDetailDeleteView(APIView):
     def get_object(self, pk):
         return get_object_or_404(Worker, id=pk)
 
     def get(self, request, pk, fromat=None):
         worker = self.get_object(pk=pk)
-        serializer = WorkerCreateSerializer(worker)
+        serializer = WorkerCreateDetailSerializer(worker)
         return Response(serializer.data)
-    
+
     def delete(self, request, pk, fromat=None):
         worker = self.get_object(pk=pk)
         worker.set_as_deleted()
@@ -31,10 +31,11 @@ class WorkerDetailDeleteView(APIView):
 
 
 class WorkerCreateView(generics.CreateAPIView):
-    serializer_class = WorkerCreateSerializer
+    serializer_class = WorkerCreateDetailSerializer
 
 
 class WorkerBranchView(generics.ListAPIView):
+    """ Getting worker by branch ID """
     pagination_class = WorkerPagination
     serializer_class = WorkerListSerializer
 
@@ -42,8 +43,8 @@ class WorkerBranchView(generics.ListAPIView):
         branch_id = self.kwargs.get("pk")
         queryset = Worker.objects.filter(branch=branch_id, status="active")
         return queryset
-    
-    
+
+
 class DeletedWorkerList(generics.ListAPIView):
     queryset = Worker.objects.filter(status="deleted")
     pagination_class = WorkerPagination
