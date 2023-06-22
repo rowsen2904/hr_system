@@ -1,22 +1,36 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework import generics
+from rest_framework.decorators import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from .models import Worker
 from .paginations import WorkerPagination
 from .serializers import WorkerCreateSerializer, WorkerListSerializer
 
 
-class WorkerList(generics.ListAPIView):
+class WorkerListView(generics.ListAPIView):
     queryset = Worker.objects.all()
     pagination_class = WorkerPagination
     serializer_class = WorkerListSerializer
+    
+    
+class WorkerDetailView(APIView):
+    def get_object(self, pk):
+        return get_object_or_404(Worker, id=pk)
+
+    def get(self, request, pk, fromat=None):
+        worker = self.get_object(pk=pk)
+        serializer = WorkerCreateSerializer(worker)
+        return Response(serializer.data)
 
 
-class WorkerCreate(generics.CreateAPIView):
+class WorkerCreateView(generics.CreateAPIView):
     serializer_class = WorkerCreateSerializer
 
 
-class WorkerBranch(generics.ListAPIView):
+class WorkerBranchView(generics.ListAPIView):
     pagination_class = WorkerPagination
     serializer_class = WorkerListSerializer
 
