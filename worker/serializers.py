@@ -9,7 +9,7 @@ class WorkerListSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "surname", "birth_date", "phone_number", "working_since", "gender"]
 
 
-class WorkerCreateDetailSerializer(serializers.ModelSerializer):
+class WorkerAllFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Worker
         fields = "__all__"

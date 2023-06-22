@@ -6,32 +6,27 @@ from rest_framework.response import Response
 
 from .models import Worker
 from .paginations import WorkerPagination
-from .serializers import WorkerCreateDetailSerializer, WorkerListSerializer
+from .serializers import WorkerAllFieldSerializer, WorkerListSerializer
 
 
-class WorkerListView(generics.ListAPIView):
+class ListWorkerAPIView(generics.ListAPIView):
     queryset = Worker.objects.all()
     pagination_class = WorkerPagination
     serializer_class = WorkerListSerializer
 
-
-class WorkerDetailDeleteView(APIView):
-    def get_object(self, pk):
-        return get_object_or_404(Worker, id=pk)
-
-    def get(self, request, pk, fromat=None):
-        worker = self.get_object(pk=pk)
-        serializer = WorkerCreateDetailSerializer(worker)
-        return Response(serializer.data)
-
+    
+class DetailWorkerView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Worker.objects.all()
+    serializer_class = WorkerAllFieldSerializer
+    
     def delete(self, request, pk, fromat=None):
-        worker = self.get_object(pk=pk)
+        worker = self.get_object()
         worker.set_as_deleted()
         return Response(status=status.HTTP_200_OK)
 
 
-class WorkerCreateView(generics.CreateAPIView):
-    serializer_class = WorkerCreateDetailSerializer
+class CreateWorkerAPIView(generics.CreateAPIView):
+    serializer_class = WorkerAllFieldSerializer
 
 
 class WorkerBranchView(generics.ListAPIView):
@@ -45,13 +40,11 @@ class WorkerBranchView(generics.ListAPIView):
         return queryset
 
 
-class DeletedWorkerList(generics.ListAPIView):
-    queryset = Worker.objects.filter(status="deleted")
+class StatusFilterWorkerListAPIView(generics.ListAPIView):
     pagination_class = WorkerPagination
     serializer_class = WorkerListSerializer
 
-
-class ActiveWorkerList(generics.ListAPIView):
-    queryset = Worker.objects.filter(status="active")
-    pagination_class = WorkerPagination
-    serializer_class = WorkerListSerializer
+    def get_queryset(self):
+        pk = self.kwargs.get("pk")
+        queryset = Worker.objects.filter(status=pk)
+        return queryset
