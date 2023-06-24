@@ -13,7 +13,7 @@ class Branch(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=100)
-    branch = models.ManyToManyField(Branch, related_name="department")
+    branches = models.ManyToManyField(Branch, related_name="department")
 
     def __str__(self):
         return self.name

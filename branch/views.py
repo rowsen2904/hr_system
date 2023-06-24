@@ -23,7 +23,7 @@ class BranchCreateAPIView(generics.CreateAPIView):
 
 
 class DepartmentListAPIView(generics.ListAPIView):
-    queryset = Department.objects.all()
+    queryset = Department.objects.prefetch_related('branches')
     serializer_class = DepartmentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = DepartmentFilter
