@@ -39,7 +39,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'dana_pd.urls'
+ROOT_URLCONF = 'hr_system.urls'
 
 TEMPLATES = [
     {
@@ -57,7 +57,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'dana_pd.wsgi.application'
+WSGI_APPLICATION = 'hr_system.wsgi.application'
 
 
 # Password validation
