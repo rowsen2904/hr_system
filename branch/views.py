@@ -1,33 +1,39 @@
-from django.shortcuts import get_object_or_404
+from django_filters import rest_framework as filters
 
-from rest_framework import generics, status
-from rest_framework.decorators import APIView
-from rest_framework.response import Response
+from rest_framework import generics
 
+from .filters import DepartmentFilter
 from .serializers import BranchSerializer, DepartmentSerializer
 from .models import Branch, Department
 
 
-class BranchListCreateView(generics.ListCreateAPIView):
+class BranchListAPIView(generics.ListAPIView):
     queryset = Branch.objects.all()
     serializer_class = BranchSerializer
 
 
-class BranchDetailDeleteView(APIView):
-    def get_object(self, pk):
-        return get_object_or_404(Branch, id=pk)
-
-    def get(self, request, pk, format=None):
-        branch = self.get_object(pk=pk)
-        serializer = BranchSerializer(branch)
-        return Response(serializer.data)
-
-    def delete(self, request, pk, format=None):
-        branch = self.get_object(pk=pk)
-        branch.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class BranchDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Branch.objects.all()
+    serializer_class = BranchSerializer
 
 
-class DepartmentCreateView(generics.CreateAPIView):
+class BranchCreateAPIView(generics.CreateAPIView):
+    queryset = Branch.objects.all()
+    serializer_class = BranchSerializer
+
+
+class DepartmentListAPIView(generics.ListAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = DepartmentFilter
+
+
+class DepartmentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+
+class DepartmentCreateAPIView(generics.CreateAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer

@@ -1,21 +1,26 @@
 from django.shortcuts import get_object_or_404
 
+from django_filters import rest_framework as filters
+
 from rest_framework import generics, status
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
 
+from .filters import WorkerFilter
 from .models import Worker
 from .paginations import WorkerPagination
 from .serializers import WorkerAllFieldSerializer, WorkerListSerializer
 
 
-class ListWorkerAPIView(generics.ListAPIView):
+class WorkerListAPIView(generics.ListAPIView):
     queryset = Worker.objects.all()
     pagination_class = WorkerPagination
     serializer_class = WorkerListSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = WorkerFilter
 
     
-class DetailWorkerView(generics.RetrieveUpdateDestroyAPIView):
+class WorkerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Worker.objects.all()
     serializer_class = WorkerAllFieldSerializer
     
@@ -25,26 +30,5 @@ class DetailWorkerView(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_200_OK)
 
 
-class CreateWorkerAPIView(generics.CreateAPIView):
+class WorkerCreateAPIView(generics.CreateAPIView):
     serializer_class = WorkerAllFieldSerializer
-
-
-class WorkerBranchView(generics.ListAPIView):
-    """ Getting worker by branch ID """
-    pagination_class = WorkerPagination
-    serializer_class = WorkerListSerializer
-
-    def get_queryset(self):
-        branch_id = self.kwargs.get("pk")
-        queryset = Worker.objects.filter(branch=branch_id, status="active")
-        return queryset
-
-
-class StatusFilterWorkerListAPIView(generics.ListAPIView):
-    pagination_class = WorkerPagination
-    serializer_class = WorkerListSerializer
-
-    def get_queryset(self):
-        pk = self.kwargs.get("pk")
-        queryset = Worker.objects.filter(status=pk)
-        return queryset
