@@ -6,7 +6,7 @@ from .models import Worker
 class WorkerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Worker
-        fields = ["id", "name", "surname", "birth_date", "phone_number", "working_since", "gender"]
+        fields = ["id", "fullname", "birth_date", "phone_number", "working_since", "gender"]
 
 
 class WorkerAllFieldSerializer(serializers.ModelSerializer):
