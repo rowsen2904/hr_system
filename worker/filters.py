@@ -9,13 +9,14 @@ class WorkerFilter(filters.FilterSet):
     status = filters.CharFilter(field_name="status")
     gender = filters.CharFilter(field_name="gender")
     department = filters.CharFilter(field_name="department")
-    q = filters.CharFilter(method="search_filter")
+    q = filters.CharFilter(method="search_filter", lookup_expr="icontains")
 
     def search_filter(self, queryset, _, value):
         search_vector = (
             SearchVector("fullname", weight="A")
             + SearchVector("id", weight="B")
             + SearchVector("emp_number", weight="C")
+            + SearchVector("address", weight="D")
         )
         search_query = SearchQuery(value)
         search_rank = SearchRank(search_vector, search_query)
@@ -24,8 +25,7 @@ class WorkerFilter(filters.FilterSet):
             .filter(search=search_query)
             .order_by("-rank")
         )
-        
 
     class Meta:
         model = Worker
-        fields = ["status", "department"]
+        fields = ["status", "department", "q"]

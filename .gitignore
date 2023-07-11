@@ -108,3 +108,7 @@ venv.bak/
 
 # mediafiles
 media/
+
+# others
+.idea/
+.DS_Store
