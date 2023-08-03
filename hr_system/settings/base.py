@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,9 +25,12 @@ INSTALLED_APPS = [
     # my apps
     "branch",
     "worker",
+    "authentication",
     # 3rd party apps
     "django_filters",
     "rest_framework",
+    "rest_framework_simplejwt",
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -38,6 +42,38 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=3),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=15),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    'JWK_URL': None,
+    'LEEWAY': 0,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
 
 ROOT_URLCONF = 'hr_system.urls'
 
@@ -79,9 +115,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
 # Database
@@ -90,13 +130,16 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv("DANA_PD_DB_NAME"), 
-        'USER': os.getenv("DANA_PD_DB_USER"),
+        'NAME': os.getenv("DANA_PD_DB_NAME", "dana_hr"), 
+        'USER': os.getenv("DANA_PD_DB_USER", "postgres"),
         'PASSWORD': os.getenv("DANA_PD_DB_PASSWORD"),
-        'HOST': os.getenv("DANA_PD_DB_HOST"), 
-        'PORT': os.getenv("DANA_PD_DB_PORT"),
+        'HOST': os.getenv("DANA_PD_DB_HOST", "localhost"), 
+        'PORT': os.getenv("DANA_PD_DB_PORT", "8000"),
     }
 }
+
+# User Model
+AUTH_USER_MODEL = 'authentication.UserData'
 
 
 # Internationalization

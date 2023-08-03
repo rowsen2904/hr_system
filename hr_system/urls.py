@@ -22,11 +22,14 @@ from hr_system import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path("", include("worker.urls")),
-    path("", include("branch.urls")),
+    path("auth/", include("authentication.urls")),
+
+    path("api/v1/", include("hr_system.api_urls"))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if settings.DEBUG:
-    urlpatterns += [path("__debug__/", include("debug_toolbar.urls"))]
+    urlpatterns += [
+        path("__debug__/", include("debug_toolbar.urls")),
+    ]

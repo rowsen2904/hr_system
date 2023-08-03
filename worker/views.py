@@ -1,7 +1,7 @@
 from django_filters import rest_framework as filters
 
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from .filters import WorkerFilter
@@ -17,7 +17,7 @@ class WorkerListAPIView(generics.ListAPIView):
     serializer_class = WorkerListSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = WorkerFilter
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
 
 
 class WorkerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):

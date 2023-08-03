@@ -32,7 +32,7 @@ class Worker(models.Model):
     phone_number = models.CharField(max_length=8)
     emp_number = models.CharField(max_length=30)
     working_since = models.DateField()
-    address = models.CharField(max_length=100)
+    address = models.CharField(max_length=255)
     mail = models.EmailField(max_length=30, null=True, blank=True)
     gender = models.CharField(max_length=15, choices=Genders.choices)
     status = models.CharField(max_length=30, choices=Statuses.choices, default=Statuses.ACTIVE)
